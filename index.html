@@ -1,27 +1,246 @@
-<!Document>
-<html>
-    <header></header>
-    <head><meta name="Referer" content="https://www.tucktools.com/"></head>
-    <title></title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <body>
-        <h1 id="data">
-        
-        </h1>
-        <button onclick="user()">click me</button>
-    </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Display and Copy</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 20px;
+            margin: 0;
+            max-width: 800px;
+            margin: auto;
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .input-row {
+            display: flex;
+            gap: 20px; /* Space between inputs */
+            margin-bottom: 20px;
+        }
+        .input-row .input-group {
+            flex: 1; /* Grow to fill available space */
+            margin-bottom: 0; /* Remove bottom margin for inputs in the row */
+        }
+        .display-box {
+            display: none; /* Initially hide the display boxes */
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            white-space: pre-wrap; /* Maintain newlines */
+            font-size: 16px;
+            color: #333;
+            cursor: pointer; /* Indicate that the box is clickable */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .display-box:hover {
+            background-color: #e9ecef;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .button-container button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        #copy-btn {
+            background-color: #007bff;
+            color: #fff;
+        }
+        #copy-btn:hover {
+            background-color: #0056b3;
+        }
+        #clear-btn {
+            background-color: #dc3545;
+            color: #fff;
+        }
+        #clear-btn:hover {
+            background-color: #c82333;
+        }
+        #add-btn {
+            background-color: #28a745;
+            color: #fff;
+        }
+        #add-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h1>Input Display and Copy</h1>
+    
+    <div id="input-container">
+        <div class="input-row">
+            <div class="input-group">
+                <label for="url">URL:</label>
+                <input type="text" name="URL">
+            </div>
+            <div class="input-group">
+                <label for="views-count">Views Count:</label>
+                <input type="number" name="Views_Count">
+            </div>
+            <div class="input-group">
+                <label for="mix-likes-count">MIX Likes Count:</label>
+                <input type="number" name="MIX_Likes Count">
+            </div>
+            <div class="input-group">
+                <label for="hq-likes-count">HQ Likes Count:</label>
+                <input type="number" name="HQ Likes Count">
+            </div>
+        </div>
+    </div>
+
+    <div id="display-container"></div>
+
+    <div class="button-container">
+        <button id="copy-btn">Copy All to Clipboard</button>
+        <button id="clear-btn">Clear</button>
+        <button id="add-btn">Add</button>
+    </div>
+
     <script>
-        function user(){
-            $.ajax({
-                    type: "GET",
-                    headers:{         
-                        'Referer': 'https://www.tucktools.com/'
-                    },
-                    url: 'https://instaskull.com/tucktools_new?username=shakira',       
-                    succces: function(data){
-                        console.log('success',data);                    
+        // Function to update the display boxes with concatenated data
+        function updateDisplay() {
+            const displayContainer = document.getElementById('display-container');
+            displayContainer.innerHTML = ''; // Clear previous content
+
+            const inputRows = document.querySelectorAll('.input-row');
+            inputRows.forEach(row => {
+                const url = row.querySelector('input[name="URL"]').value.trim();
+                const viewsCount = row.querySelector('input[name="Views_Count"]').value.trim();
+                const mixLikesCount = row.querySelector('input[name="MIX_Likes Count"]').value.trim();
+                const hqLikesCount = row.querySelector('input[name="HQ Likes Count"]').value.trim();
+
+                if (viewsCount || mixLikesCount || hqLikesCount) {
+                    if (viewsCount) {
+                        const displayBox1 = document.createElement('div');
+                        displayBox1.className = 'display-box';
+                        displayBox1.textContent = `ID: 843 | ${url || 'N/A'} | Views Count: ${viewsCount}`;
+                        displayBox1.addEventListener('click', () => copyToClipboard(displayBox1.textContent));
+                        displayContainer.appendChild(displayBox1);
                     }
+
+                    if (mixLikesCount) {
+                        const displayBox2 = document.createElement('div');
+                        displayBox2.className = 'display-box';
+                        displayBox2.textContent = `ID: 685 | ${url || 'N/A'} | MIX Likes Count: ${mixLikesCount}`;
+                        displayBox2.addEventListener('click', () => copyToClipboard(displayBox2.textContent));
+                        displayContainer.appendChild(displayBox2);
+                    }
+
+                    if (hqLikesCount) {
+                        const displayBox3 = document.createElement('div');
+                        displayBox3.className = 'display-box';
+                        displayBox3.textContent = `ID: 104 | ${url || 'N/A'} | HQ Likes Count: ${hqLikesCount}`;
+                        displayBox3.addEventListener('click', () => copyToClipboard(displayBox3.textContent));
+                        displayContainer.appendChild(displayBox3);
+                    }
+                }
             });
         }
+
+        // Function to copy text to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard!');
+            }, (err) => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // Function to clear all inputs and display boxes
+        function clearAll() {
+            document.querySelectorAll('.input-row input').forEach(input => input.value = '');
+            document.getElementById('display-container').innerHTML = ''; // Clear display boxes
+        }
+
+        // Function to add a new set of input fields
+        function addFields() {
+            const container = document.getElementById('input-container');
+            const newRow = document.createElement('div');
+            newRow.className = 'input-row';
+            newRow.innerHTML = `
+                <div class="input-group">
+                    <label for="url">URL:</label>
+                    <input type="text" name="URL">
+                </div>
+                <div class="input-group">
+                    <label for="views-count">Views Count:</label>
+                    <input type="number" name="Views_Count">
+                </div>
+                <div class="input-group">
+                    <label for="mix-likes-count">MIX Likes Count:</label>
+                    <input type="number" name="MIX_Likes Count">
+                </div>
+                <div class="input-group">
+                    <label for="hq-likes-count">HQ Likes Count:</label>
+                    <input type="number" name="HQ Likes Count">
+                </div>
+            `;
+            container.appendChild(newRow);
+
+            // Add input event listeners to new fields
+            newRow.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', updateDisplay);
+            });
+
+            // Update the display after adding new fields
+            updateDisplay();
+        }
+
+        // Function to copy all content to clipboard
+        function copyAllToClipboard() {
+            const displayContainer = document.getElementById('display-container');
+            const allText = Array.from(displayContainer.children)
+                .map(child => child.textContent)
+                .join('\n');
+            copyToClipboard(allText);
+        }
+
+        // Event listeners
+        document.getElementById('copy-btn').addEventListener('click', copyAllToClipboard);
+        document.getElementById('clear-btn').addEventListener('click', clearAll);
+        document.getElementById('add-btn').addEventListener('click', addFields);
+
+        // Initial setup: add event listeners to existing inputs
+        document.querySelectorAll('.input-row input').forEach(input => {
+            input.addEventListener('input', updateDisplay);
+        });
     </script>
+</body>
 </html>
