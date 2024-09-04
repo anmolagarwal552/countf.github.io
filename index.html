@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Display and Copy</title>
+    <title>Scripting Tool</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -102,7 +102,7 @@
     </style>
 </head>
 <body>
-    <h1>Input Display and Copy</h1>
+    <h1>Performance Scripting Tool</h1>
     
     <div id="input-container">
         <div class="input-row">
@@ -150,7 +150,7 @@
                     if (viewsCount) {
                         const displayBox1 = document.createElement('div');
                         displayBox1.className = 'display-box';
-                        displayBox1.textContent = `ID: 843 | ${url || 'N/A'} | Views Count: ${viewsCount}`;
+                        displayBox1.textContent = `843 | ${url} | ${viewsCount}`;
                         displayBox1.addEventListener('click', () => copyToClipboard(displayBox1.textContent));
                         displayContainer.appendChild(displayBox1);
                     }
@@ -158,7 +158,7 @@
                     if (mixLikesCount) {
                         const displayBox2 = document.createElement('div');
                         displayBox2.className = 'display-box';
-                        displayBox2.textContent = `ID: 685 | ${url || 'N/A'} | MIX Likes Count: ${mixLikesCount}`;
+                        displayBox2.textContent = `685 | ${url} | ${mixLikesCount}`;
                         displayBox2.addEventListener('click', () => copyToClipboard(displayBox2.textContent));
                         displayContainer.appendChild(displayBox2);
                     }
@@ -166,7 +166,7 @@
                     if (hqLikesCount) {
                         const displayBox3 = document.createElement('div');
                         displayBox3.className = 'display-box';
-                        displayBox3.textContent = `ID: 104 | ${url || 'N/A'} | HQ Likes Count: ${hqLikesCount}`;
+                        displayBox3.textContent = `104 | ${url} | ${hqLikesCount}`;
                         displayBox3.addEventListener('click', () => copyToClipboard(displayBox3.textContent));
                         displayContainer.appendChild(displayBox3);
                     }
